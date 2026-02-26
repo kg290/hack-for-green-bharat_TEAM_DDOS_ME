@@ -1,31 +1,44 @@
-# Offroad Semantic Scene Segmentation
+<div align="center">
 
-**Duality AI -- Hack For Green Bharat Hackathon**
+# 🌿 Offroad Semantic Scene Segmentation
 
-**Team Name:** DDOS_ME
-**Team Members:** Karnajeet Gosavi, Jay Gautam, Manas Bagul, Archit Bagad
+### Hack For Green Bharat Hackathon — Duality AI
 
-Pixel-wise semantic segmentation of synthetic desert environments using DeepLabV3+ with ResNet-101 backbone. The model segments offroad terrain images into 10 semantic classes.
+**Team DDOS_ME**
 
----
+*Karnajeet Gosavi · Jay Gautam · Manas Bagul · Archit Bagad*
 
-## Table of Contents
+[![Python 3.10](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
+[![PyTorch 2.1](https://img.shields.io/badge/PyTorch-2.1.2-ee4c2c.svg)](https://pytorch.org/)
+[![CUDA 12.1](https://img.shields.io/badge/CUDA-12.1-76b900.svg)](https://developer.nvidia.com/cuda-toolkit)
 
-1. [Project Structure](#project-structure)
-2. [Environment Setup](#environment-setup)
-3. [Dataset](#dataset)
-4. [Training](#training)
-5. [Testing / Inference](#testing--inference)
-6. [Results](#results)
-7. [Methodology](#methodology)
-8. [Evaluation Metrics](#evaluation-metrics)
-9. [Failure Case Analysis](#failure-case-analysis)
-10. [PDF Report Generation](#pdf-report-generation)
-11. [Reproducing Results](#reproducing-results)
+Pixel-wise semantic segmentation of synthetic desert environments using **DeepLabV3+ with ResNet-101** backbone, trained with a novel two-phase domain-generalisation strategy. The model segments offroad terrain images into **10 semantic classes**.
+
+<img src="training_dashboard.png" alt="Training Dashboard" width="90%"/>
+
+*Complete training dashboard — loss, mIoU, accuracy, learning rate, and per-class performance across 50 epochs.*
+
+</div>
 
 ---
 
-## Project Structure
+## 📑 Table of Contents
+
+1. [Project Structure](#-project-structure)
+2. [Environment Setup](#-environment-setup)
+3. [Dataset](#-dataset)
+4. [Training](#-training)
+5. [Testing / Inference](#-testing--inference)
+6. [Results](#-results)
+7. [Methodology](#-methodology)
+8. [Evaluation Metrics](#-evaluation-metrics)
+9. [Failure Case Analysis](#-failure-case-analysis)
+10. [PDF Report Generation](#-pdf-report-generation)
+11. [Reproducing Results](#-reproducing-results)
+
+---
+
+## 📂 Project Structure
 
 ```
 HACKFORBHARAT/
@@ -38,7 +51,6 @@ HACKFORBHARAT/
 ├── utils.py                 # Metrics (IoU), loss functions, plotting utilities
 ├── generate_report_pdf.py   # Generate 8-page PDF hackathon report with plots
 ├── requirements.txt         # Python dependencies
-├── .gitignore               # Git ignore rules
 ├── README.md                # This file
 ├── PROBLEM_STATEMENT.md     # Original hackathon problem statement
 ├── HACKATHON_REPORT.pdf     # Generated 8-page PDF report (with plots & metrics)
@@ -67,14 +79,16 @@ HACKFORBHARAT/
 
 ---
 
-## Environment Setup
+## ⚙️ Environment Setup
 
 ### Requirements
 
-- **Python:** 3.10
-- **PyTorch:** 2.1.2 + CUDA 12.1
-- **torchvision:** 0.16.2
-- **GPU:** NVIDIA RTX 4060 (8 GB VRAM) or equivalent
+| Dependency | Version |
+|------------|---------|
+| Python | 3.10 |
+| PyTorch | 2.1.2 + CUDA 12.1 |
+| torchvision | 0.16.2 |
+| GPU | NVIDIA RTX 4060 (8 GB VRAM) or equivalent |
 
 ### Installation
 
@@ -95,7 +109,8 @@ pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorc
 pip install -r requirements.txt
 ```
 
-### Dependencies (requirements.txt)
+<details>
+<summary><strong>Dependencies (requirements.txt)</strong></summary>
 
 ```
 numpy==1.26.4
@@ -106,11 +121,13 @@ opencv-contrib-python>=4.7
 scipy>=1.11
 ```
 
+</details>
+
 ---
 
-## Dataset
+## 📊 Dataset
 
-The dataset is provided by Duality AI's Falcon synthetic data platform, consisting of desert environment scenes.
+The dataset is provided by **Duality AI's Falcon** synthetic data platform, consisting of desert environment scenes.
 
 | Split | Images | Resolution | Purpose |
 |-------|--------|------------|---------|
@@ -122,26 +139,26 @@ The dataset is provided by Duality AI's Falcon synthetic data platform, consisti
 
 | Original ID | Class Name      | Index | In Test Set? | Train Pixels % | Test Pixels % |
 |-------------|----------------|-------|:------------:|:--------------:|:-------------:|
-| 100         | Trees          | 0     | Yes          | 3.53%          | 0.27%         |
-| 200         | Lush Bushes    | 1     | Yes          | 5.93%          | ~0%           |
-| 300         | Dry Grass      | 2     | Yes          | 18.87%         | 17.4%         |
-| 500         | Dry Bushes     | 3     | Yes          | 1.10%          | 3.05%         |
-| 550         | Ground Clutter | 4     | No           | 4.39%          | 0%            |
-| 600         | Flowers        | 5     | No           | 2.81%          | 0%            |
-| 700         | Logs           | 6     | No           | 0.08%          | 0%            |
-| 800         | Rocks          | 7     | Yes          | 1.20%          | 18.1%         |
-| 7100        | Landscape      | 8     | Yes          | 24.45%         | 43.2%         |
-| 10000       | Sky            | 9     | Yes          | 37.64%         | 18.0%         |
+| 100         | Trees          | 0     | ✅           | 3.53%          | 0.27%         |
+| 200         | Lush Bushes    | 1     | ✅           | 5.93%          | ~0%           |
+| 300         | Dry Grass      | 2     | ✅           | 18.87%         | 17.4%         |
+| 500         | Dry Bushes     | 3     | ✅           | 1.10%          | 3.05%         |
+| 550         | Ground Clutter | 4     | ❌           | 4.39%          | 0%            |
+| 600         | Flowers        | 5     | ❌           | 2.81%          | 0%            |
+| 700         | Logs           | 6     | ❌           | 0.08%          | 0%            |
+| 800         | Rocks          | 7     | ✅           | 1.20%          | 18.1%         |
+| 7100        | Landscape      | 8     | ✅           | 24.45%         | 43.2%         |
+| 10000       | Sky            | 9     | ✅           | 37.64%         | 18.0%         |
 
-**Key Challenge — Domain Shift:**
-- 3 classes (Ground Clutter, Flowers, Logs) are entirely absent in the test set
-- Rocks: 1.2% in training → 18.1% in test (15× increase)
-- Landscape: 24.5% in training → 43.2% in test
-- Train and test images come from **different desert environments** with different lighting conditions (train brightness 0.507 vs test 0.423)
+> **⚠️ Key Challenge — Domain Shift:**
+> - 3 classes (Ground Clutter, Flowers, Logs) are **entirely absent** in the test set
+> - Rocks: 1.2% → 18.1% in test (**15× increase**)
+> - Landscape: 24.5% → 43.2% in test
+> - Train and test images come from **different desert environments** (train brightness 0.507 vs test 0.423)
 
 ---
 
-## Training
+## 🏋️ Training
 
 ### Phase 1 — Base Model (448×800)
 
@@ -176,6 +193,20 @@ python train_phase2.py --checkpoint runs_phase2/checkpoints/best_model.pth --epo
 | EMA | Exponential Moving Average (decay=0.999) |
 | Epochs | 50 |
 | Result | **Val mIoU = 0.6338** (Epoch 45) |
+
+<div align="center">
+<img src="phase_comparison.png" alt="Phase 1 vs Phase 2 Comparison" width="80%"/>
+
+*Phase 1 vs Phase 2 — improvements across loss, mIoU, and accuracy from domain-generalisation fine-tuning.*
+</div>
+
+#### Learning Rate Schedule
+
+<div align="center">
+<img src="lr_schedule.png" alt="Learning Rate Schedule" width="55%"/>
+
+*OneCycleLR schedule with 5% warmup followed by cosine decay over 50 epochs.*
+</div>
 
 #### Phase 2 v4 Augmentation Strategy
 
@@ -213,7 +244,7 @@ Tuned for the test distribution domain shift:
 
 ---
 
-## Testing / Inference
+## 🧪 Testing / Inference
 
 ### Standard Test (Multi-Scale TTA)
 
@@ -246,7 +277,7 @@ runs_phase2/predictions/
 
 ---
 
-## Results
+## 📈 Results
 
 ### Training Performance (Validation Set — Same Domain)
 
@@ -256,20 +287,48 @@ runs_phase2/predictions/
 | Val Test-Relevant mIoU (7 classes) | — | **0.6913** | — |
 | Val Pixel Accuracy | — | 0.8645 | — |
 
+### Training Curves
+
+<div align="center">
+
+| Loss | IoU |
+|:---:|:---:|
+| <img src="loss_curves.png" alt="Loss Curves" width="400"/> | <img src="iou_curves.png" alt="IoU Curves" width="400"/> |
+| *Train vs validation loss over 50 epochs* | *mIoU progression — all classes & test-relevant* |
+
+| Accuracy | Test-Relevant mIoU |
+|:---:|:---:|
+| <img src="accuracy_curves.png" alt="Accuracy Curves" width="400"/> | <img src="test_relevant_miou.png" alt="Test-Relevant mIoU" width="400"/> |
+| *Pixel accuracy convergence during training* | *7-class test-relevant mIoU reaching 0.6913* |
+
+</div>
+
 #### Phase 2 v4 — Per-Class Validation IoU (Best Epoch 45)
+
+<div align="center">
+<img src="val_per_class_iou.png" alt="Validation Per-Class IoU" width="70%"/>
+
+*Per-class IoU breakdown on the validation set — Sky (0.98) dominates while Dry Bushes (0.50) and Rocks (0.48) remain challenging.*
+</div>
 
 | Class | Phase 2 v4 Val IoU | In Test? |
 |-------|:------------------:|:--------:|
-| Trees | 0.8476 | Yes |
-| Lush Bushes | 0.6805 | Yes |
-| Dry Grass | 0.6803 | Yes |
-| Dry Bushes | 0.4962 | Yes |
-| Ground Clutter | 0.2974 | No |
-| Flowers | 0.6313 | No |
-| Logs | 0.5698 | No |
-| Rocks | 0.4761 | Yes |
-| Landscape | 0.6760 | Yes |
-| Sky | 0.9825 | Yes |
+| Trees | 0.8476 | ✅ |
+| Lush Bushes | 0.6805 | ✅ |
+| Dry Grass | 0.6803 | ✅ |
+| Dry Bushes | 0.4962 | ✅ |
+| Ground Clutter | 0.2974 | ❌ |
+| Flowers | 0.6313 | ❌ |
+| Logs | 0.5698 | ❌ |
+| Rocks | 0.4761 | ✅ |
+| Landscape | 0.6760 | ✅ |
+| Sky | 0.9825 | ✅ |
+
+<div align="center">
+<img src="val_confusion_matrix.png" alt="Validation Confusion Matrix" width="60%"/>
+
+*Validation confusion matrix — diagonal dominance shows strong class separation on the training domain.*
+</div>
 
 ### Test Performance (Novel Desert Environment)
 
@@ -293,52 +352,48 @@ runs_phase2/predictions/
 | Test Pixel Accuracy | 0.6958 |
 | Avg Inference Time | 224.2 ms/image (multi-scale TTA) |
 
-> **Note:** The 10-class mIoU (0.3013) includes 3 classes entirely absent from the test set (Ground Clutter, Flowers, Logs), each contributing 0.0. The 7-class mIoU (0.4304) is a more representative measure of model performance on the test environment.
+> **Note:** The 10-class mIoU (0.3013) includes 3 classes entirely absent from the test set (Ground Clutter, Flowers, Logs), each contributing 0.0. The **7-class mIoU (0.4304)** is a more representative measure of model performance.
 
-### Training Curves
+<div align="center">
+<img src="final_per_class_iou.png" alt="Final Per-Class IoU" width="70%"/>
 
-Training plots are located in `runs_phase2/plots/`:
+*Per-class IoU on test set — Sky (0.97) and Landscape (0.65) perform well, Rocks (0.06) is the key failure point.*
+</div>
 
-| Plot | Description |
-|------|-------------|
-| `loss_curves.png` | Train vs validation loss over 50 epochs |
-| `iou_curves.png` | Train/val mIoU + test-relevant mIoU curves |
-| `test_relevant_miou.png` | 7-class test-relevant mIoU progression |
-| `accuracy_curves.png` | Pixel accuracy curves |
-| `lr_schedule.png` | OneCycleLR learning rate schedule |
-| `phase_comparison.png` | Phase 1 vs Phase 2 comparison |
-| `training_dashboard.png` | Combined 2×3 dashboard of all metrics |
-| `final_per_class_iou.png` | Per-class IoU bar chart (best checkpoint) |
-| `final_confusion_matrix.png` | 10x10 confusion matrix |
-| `val_predictions.png` | Sample validation predictions grid |
+<div align="center">
+<img src="final_confusion_matrix.png" alt="Test Confusion Matrix" width="60%"/>
+
+*Test confusion matrix — reveals Rocks being heavily misclassified as Landscape and Dry Grass, the primary source of domain-shift error.*
+</div>
+
+### Sample Predictions
+
+<div align="center">
+<img src="val_predictions.png" alt="Validation Predictions" width="90%"/>
+
+*Sample validation predictions — input image (left), ground truth (centre), model prediction (right).*
+</div>
 
 ---
 
-## PDF Report Generation
+## 📄 PDF Report Generation
 
-A comprehensive 8-page PDF report (`HACKATHON_REPORT.pdf`) is generated using `generate_report_pdf.py`. It embeds training plots, prediction visualisations, confusion matrices, and per-class IoU charts alongside all key metrics and methodology details.
+A comprehensive 8-page PDF report (`HACKATHON_REPORT.pdf`) can be regenerated:
 
 ```bash
 python generate_report_pdf.py
 ```
 
-The script uses **fpdf2** for PDF layout and **Pillow** for accurate image dimension calculation. The report includes:
-
-- Training dashboard and performance metrics
-- Two-phase methodology with augmentation details
-- Loss curves, IoU curves, and LR schedule plots
-- Confusion matrix and per-class IoU charts
-- Test comparison visualisations and failure analysis
-- Future work and reproduction instructions
+The script uses **fpdf2** for PDF layout and **Pillow** for accurate image dimension calculation. The report includes training dashboards, methodology, all plots, confusion matrices, and failure analysis.
 
 ---
 
-## Methodology
+## 🔬 Methodology
 
 ### Two-Phase Training Strategy
 
 #### Phase 1 — Base Feature Learning
-1. **Model:** DeepLabV3+ with ResNet-101 backbone, COCO-pretrained weights provide strong feature initialisation
+1. **Model:** DeepLabV3+ with ResNet-101 backbone, COCO-pretrained weights
 2. **Resolution:** 448×800 (16:9 preserved, fits 8GB VRAM at batch 4)
 3. **Augmentation:** Random scale (0.5-2.0×), horizontal flip, rotation (±15°), colour jitter, Gaussian blur
 4. **Loss:** Combined Cross-Entropy + Dice (0.5/0.5) with class weights
@@ -348,12 +403,12 @@ The script uses **fpdf2** for PDF layout and **Pillow** for accurate image dimen
 #### Phase 2 — Domain-Generalisation Fine-Tuning
 1. **Resolution:** Original 540×960 — zero information loss from downscaling
 2. **Foundation:** Loads Phase 1 best checkpoint and fine-tunes
-3. **Strong augmentation (v4):** 7 additional augmentation techniques specifically targeting the brightness/contrast domain gap between train and test environments
-4. **Copy-paste augmentation:** Rock and DryBush patches extracted and pasted with independent colour jitter (50% probability per image)
-5. **Weighted sampling:** Images containing >2% Rock/DryBush pixels are oversampled 2.5×
-6. **Loss:** Focal Loss (γ=2.0) + Dice (0.4/0.6) — focuses gradient on hard, rare pixels
-7. **EMA:** Exponential Moving Average (decay=0.999) stabilises weights for better generalisation
-8. **OneCycleLR:** 5% warmup → cosine decay for smooth and effective convergence
+3. **Strong augmentation (v4):** 7 additional techniques targeting the brightness/contrast domain gap
+4. **Copy-paste augmentation:** Rock and DryBush patches inserted with independent colour jitter (50% probability)
+5. **Weighted sampling:** Images containing >2% Rock/DryBush pixels oversampled 2.5×
+6. **Loss:** Focal Loss (γ=2.0) + Dice (0.4/0.6) — focuses on hard, rare pixels
+7. **EMA:** Exponential Moving Average (decay=0.999) for stable generalisation
+8. **OneCycleLR:** 5% warmup → cosine decay
 
 ### Domain Shift Analysis
 
@@ -365,40 +420,37 @@ The core challenge is the significant domain gap between training and test envir
 | RGB Distribution | R=0.099, G=0.099, B=0.053 | Different | Shifted |
 | Rock Coverage | 1.2% | 18.1% | 15× increase |
 | Landscape Coverage | 24.5% | 43.2% | 1.8× increase |
-| Desert Environment | Environment A | Environment B | Completely different location |
+| Desert Environment | Environment A | Environment B | Completely different |
 
 This domain shift causes the validation → test performance gap (val mIoU 0.6338 → test mIoU 0.3013). The v4 augmentation strategy specifically addresses the lighting and colour shift aspects.
 
 ---
 
-## Evaluation Metrics
+## 📏 Evaluation Metrics
 
 - **Mean IoU (mIoU):** Primary hackathon metric — intersection over union averaged across all classes
 - **Test-Relevant mIoU:** mIoU over 7 classes present in the test set
 - **Per-Class IoU:** Breakdown per category to identify strengths and failure modes
 - **Pixel Accuracy:** Fraction of correctly classified pixels
 - **Confusion Matrix:** Visualises inter-class misclassification patterns
-- **Inference Speed:** Milliseconds per image (224.2 ms with multi-scale TTA)
+- **Inference Speed:** 224.2 ms/image (multi-scale TTA)
 
 ---
 
-## Failure Case Analysis
+## 🔍 Failure Case Analysis
 
 Failure analysis is generated by `test.py --failure_analysis` and saved to `runs_phase2/predictions/failure_analysis/`.
 
 ### Key Failure Modes
 
-1. **Rocks (IoU: 0.0569):** Most significant failure. The model struggles to recognise rocks in the test environment due to dramatic visual difference from training rocks (different texture, colour, lighting). Rocks in test images are frequently misclassified as Landscape or Dry Grass.
-
-2. **Trees (IoU: 0.3787):** Moderate failure. Test trees differ visually from training trees — different species, shape, and lighting conditions.
-
-3. **Lush Bushes (IoU: 0.0005):** Nearly zero — Lush Bushes are effectively absent in the test environment.
-
-4. **3 Absent Classes (IoU: 0.0000):** Ground Clutter, Flowers, and Logs are not present in test images, contributing zero to mIoU.
+1. **Rocks (IoU: 0.0569):** Most significant failure — dramatic visual difference between train and test rocks (texture, colour, lighting). Frequently misclassified as Landscape or Dry Grass.
+2. **Trees (IoU: 0.3787):** Moderate failure — different species, shape, and lighting in test.
+3. **Lush Bushes (IoU: 0.0005):** Near zero — effectively absent in test.
+4. **3 Absent Classes (IoU: 0.0000):** Ground Clutter, Flowers, and Logs not present in test.
 
 ### Why the Gap Exists
 
-The synthetic dataset from Duality AI's Falcon platform uses two distinct desert environments for train and test. While the model learns strong features on the training environment (val mIoU 0.6338), these features don't fully transfer to the test environment due to:
+The synthetic dataset from Duality AI's Falcon platform uses two distinct desert environments for train and test. While the model achieves strong validation performance (mIoU 0.6338), full transfer is limited by:
 - Different terrain textures and materials
 - Different lighting conditions (16.6% brightness difference)
 - Different class proportions (15× more Rocks in test)
@@ -406,7 +458,7 @@ The synthetic dataset from Duality AI's Falcon platform uses two distinct desert
 
 ---
 
-## Reproducing Results
+## 🔄 Reproducing Results
 
 ```bash
 # 1. Setup environment
@@ -426,38 +478,32 @@ python test.py --checkpoint runs_phase2/checkpoints/best_model.pth --multiscale 
 
 # 5. Generate PDF report
 python generate_report_pdf.py
-
-# 6. View results
-#    → runs_phase2/predictions/test_metrics.txt        (IoU scores)
-#    → runs_phase2/predictions/test_per_class_iou.png  (per-class IoU chart)
-#    → runs_phase2/predictions/comparisons/            (side-by-side visualisations)
-#    → runs_phase2/predictions/failure_analysis/        (worst predictions per class)
-#    → runs_phase2/predictions/submission_masks/        (submission-ready uint16 masks)
-#    → runs_phase2/plots/                              (all training plots & dashboard)
 ```
 
 ### Expected Outputs
 
-After full training and evaluation, you should see:
-- **Phase 1:** Val mIoU ≈ 0.6077 (epoch ~66)
-- **Phase 2 v4:** Val mIoU ≈ 0.6338, test-relevant val mIoU ≈ 0.6913 (epoch ~45)
-- **Test mIoU:** ≈ 0.3013 (10-class) / 0.4304 (7 present classes) with multi-scale TTA
-- **Submission masks:** 1002 uint16 PNG files in `runs_phase2/predictions/submission_masks/`
-- **PDF Report:** 8-page `HACKATHON_REPORT.pdf` with embedded plots and metrics
+| Stage | Metric | Expected Value |
+|-------|--------|----------------|
+| Phase 1 | Val mIoU | ≈ 0.6077 (epoch ~66) |
+| Phase 2 v4 | Val mIoU | ≈ 0.6338 (epoch ~45) |
+| Phase 2 v4 | Test-Relevant Val mIoU | ≈ 0.6913 |
+| Test | mIoU (10-class) | ≈ 0.3013 |
+| Test | mIoU (7 present classes) | ≈ 0.4304 |
+| Submission | Mask count | 1002 uint16 PNGs |
 
 ---
 
-## Important Notes
+## ⚠️ Important Notes
 
-- **Test images are NEVER used during training or validation.** Strict separation is maintained.
+- **Test images are NEVER used during training or validation.** Strict train/val/test separation is maintained.
 - **Training data only:** The model is trained exclusively on the provided hackathon dataset.
 - **Class IDs in submission masks** use original IDs (100, 200, 300, ..., 10000) in uint16 format as specified.
 - All 10 classes from the problem statement are supported.
-- The model weights are saved in `runs_phase2/checkpoints/best_model.pth`.
+- Model weights: `runs_phase2/checkpoints/best_model.pth`
 
 ---
 
-## Dependencies
+## 📦 Dependencies
 
 | Package | Version |
 |---------|---------|
@@ -473,9 +519,10 @@ After full training and evaluation, you should see:
 | scipy | ≥1.11 |
 | fpdf2 | ≥2.7 |
 
-### Report Generation Only
+---
 
-| Package | Version |
-|---------|---------|
-| fpdf2 | >=2.7 |
-| Pillow | >=9.4 |
+<div align="center">
+
+**Built with ❤️ by Team DDOS_ME for Hack For Green Bharat**
+
+</div>
